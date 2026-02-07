@@ -1,122 +1,196 @@
 @extends('layouts.app')
 
 @section('title', 'Add Customer')
+@section('page-title', 'Add Customer')
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1><i class="bi bi-person-plus"></i> Add Customer</h1>
-    <a href="{{ route('customers.index') }}" class="btn btn-secondary">Back</a>
-</div>
+<div class="max-w-4xl mx-auto space-y-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Add Customer</h1>
+            <p class="mt-1 text-sm text-gray-500">Create a new customer profile</p>
+        </div>
+        <a href="{{ route('customers.index') }}" class="btn-secondary-modern">
+            <i class="bi bi-arrow-left"></i>
+            Back
+        </a>
+    </div>
 
-<div class="card">
-    <div class="card-body">
-        <form action="{{ route('customers.store') }}" method="POST">
+    <!-- Form Card -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <form action="{{ route('customers.store') }}" method="POST" class="space-y-6">
             @csrf
 
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="first_name" class="form-label">First Name <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control @error('first_name') is-invalid @enderror" 
-                           id="first_name" name="first_name" value="{{ old('first_name') }}" required>
-                    @error('first_name')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+            <!-- Personal Information -->
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Personal Information</h3>
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div>
+                        <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">
+                            First Name <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" 
+                               id="first_name" 
+                               name="first_name" 
+                               value="{{ old('first_name') }}"
+                               required
+                               class="input-modern @error('first_name') border-red-300 @enderror">
+                        @error('first_name')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                <div class="col-md-6 mb-3">
-                    <label for="last_name" class="form-label">Last Name <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control @error('last_name') is-invalid @enderror" 
-                           id="last_name" name="last_name" value="{{ old('last_name') }}" required>
-                    @error('last_name')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
+                    <div>
+                        <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">
+                            Last Name <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" 
+                               id="last_name" 
+                               name="last_name" 
+                               value="{{ old('last_name') }}"
+                               required
+                               class="input-modern @error('last_name') border-red-300 @enderror">
+                        @error('last_name')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control @error('email') is-invalid @enderror" 
-                           id="email" name="email" value="{{ old('email') }}">
-                    @error('email')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" 
+                               id="email" 
+                               name="email" 
+                               value="{{ old('email') }}"
+                               class="input-modern @error('email') border-red-300 @enderror">
+                        @error('email')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                <div class="col-md-6 mb-3">
-                    <label for="phone" class="form-label">Phone <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control @error('phone') is-invalid @enderror" 
-                           id="phone" name="phone" value="{{ old('phone') }}" required>
-                    @error('phone')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">
+                            Phone <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" 
+                               id="phone" 
+                               name="phone" 
+                               value="{{ old('phone') }}"
+                               required
+                               class="input-modern @error('phone') border-red-300 @enderror">
+                        @error('phone')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="alternate_phone" class="form-label">Alternate Phone</label>
-                    <input type="text" class="form-control" id="alternate_phone" name="alternate_phone" 
-                           value="{{ old('alternate_phone') }}">
-                </div>
+                    <div>
+                        <label for="alternate_phone" class="block text-sm font-medium text-gray-700 mb-1">Alternate Phone</label>
+                        <input type="text" 
+                               id="alternate_phone" 
+                               name="alternate_phone" 
+                               value="{{ old('alternate_phone') }}"
+                               class="input-modern">
+                    </div>
 
-                <div class="col-md-6 mb-3">
-                    <label for="gender" class="form-label">Gender</label>
-                    <select class="form-select" id="gender" name="gender">
-                        <option value="">Select</option>
-                        <option value="male" {{ old('gender') === 'male' ? 'selected' : '' }}>Male</option>
-                        <option value="female" {{ old('gender') === 'female' ? 'selected' : '' }}>Female</option>
-                        <option value="other" {{ old('gender') === 'other' ? 'selected' : '' }}>Other</option>
-                    </select>
-                </div>
-            </div>
+                    <div>
+                        <label for="gender" class="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+                        <select id="gender" name="gender" class="input-modern">
+                            <option value="">Select</option>
+                            <option value="male" {{ old('gender') === 'male' ? 'selected' : '' }}>Male</option>
+                            <option value="female" {{ old('gender') === 'female' ? 'selected' : '' }}>Female</option>
+                            <option value="other" {{ old('gender') === 'other' ? 'selected' : '' }}>Other</option>
+                        </select>
+                    </div>
 
-            <div class="mb-3">
-                <label for="address" class="form-label">Address</label>
-                <textarea class="form-control" id="address" name="address" rows="2">{{ old('address') }}</textarea>
-            </div>
-
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label for="city" class="form-label">City</label>
-                    <input type="text" class="form-control" id="city" name="city" value="{{ old('city') }}">
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label for="state" class="form-label">State</label>
-                    <input type="text" class="form-control" id="state" name="state" value="{{ old('state') }}">
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label for="zip_code" class="form-label">Zip Code</label>
-                    <input type="text" class="form-control" id="zip_code" name="zip_code" value="{{ old('zip_code') }}">
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="date_of_birth" class="form-label">Date of Birth</label>
-                    <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" 
-                           value="{{ old('date_of_birth') }}">
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <div class="form-check mt-4">
-                        <input class="form-check-input" type="checkbox" id="is_active" name="is_active" 
-                               value="1" {{ old('is_active', true) ? 'checked' : '' }}>
-                        <label class="form-check-label" for="is_active">Active</label>
+                    <div>
+                        <label for="date_of_birth" class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
+                        <input type="date" 
+                               id="date_of_birth" 
+                               name="date_of_birth" 
+                               value="{{ old('date_of_birth') }}"
+                               class="input-modern">
                     </div>
                 </div>
             </div>
 
-            <div class="mb-3">
-                <label for="notes" class="form-label">Notes</label>
-                <textarea class="form-control" id="notes" name="notes" rows="3">{{ old('notes') }}</textarea>
+            <!-- Address Information -->
+            <div class="border-t border-gray-200 pt-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Address Information</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label for="address" class="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                        <textarea id="address" 
+                                  name="address" 
+                                  rows="2"
+                                  class="input-modern">{{ old('address') }}</textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+                        <div>
+                            <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                            <input type="text" 
+                                   id="city" 
+                                   name="city" 
+                                   value="{{ old('city') }}"
+                                   class="input-modern">
+                        </div>
+
+                        <div>
+                            <label for="state" class="block text-sm font-medium text-gray-700 mb-1">State</label>
+                            <input type="text" 
+                                   id="state" 
+                                   name="state" 
+                                   value="{{ old('state') }}"
+                                   class="input-modern">
+                        </div>
+
+                        <div>
+                            <label for="zip_code" class="block text-sm font-medium text-gray-700 mb-1">Zip Code</label>
+                            <input type="text" 
+                                   id="zip_code" 
+                                   name="zip_code" 
+                                   value="{{ old('zip_code') }}"
+                                   class="input-modern">
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="d-flex justify-content-end gap-2">
-                <a href="{{ route('customers.index') }}" class="btn btn-secondary">Cancel</a>
-                <button type="submit" class="btn btn-primary">Create Customer</button>
+            <!-- Additional Information -->
+            <div class="border-t border-gray-200 pt-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Additional Information</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center">
+                        <input type="checkbox" 
+                               id="is_active" 
+                               name="is_active" 
+                               value="1" 
+                               {{ old('is_active', true) ? 'checked' : '' }}
+                               class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                        <label for="is_active" class="ml-2 block text-sm text-gray-700">
+                            Active Customer
+                        </label>
+                    </div>
+
+                    <div>
+                        <label for="notes" class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                        <textarea id="notes" 
+                                  name="notes" 
+                                  rows="3"
+                                  class="input-modern">{{ old('notes') }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="flex items-center justify-end gap-3 pt-6 border-t border-gray-200">
+                <a href="{{ route('customers.index') }}" class="btn-secondary-modern">
+                    Cancel
+                </a>
+                <button type="submit" class="btn-primary-modern">
+                    <i class="bi bi-check-circle"></i>
+                    Create Customer
+                </button>
             </div>
         </form>
     </div>
