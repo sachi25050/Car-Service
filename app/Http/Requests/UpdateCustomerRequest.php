@@ -14,10 +14,12 @@ class UpdateCustomerRequest extends FormRequest
 
     public function rules(): array
     {
+        $customer = $this->route('customer');
+        
         return [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => ['nullable', 'email', Rule::unique('customers', 'email')->ignore($this->customer)],
+            'email' => ['nullable', 'email', Rule::unique('customers', 'email')->ignore($customer)],
             'phone' => 'required|string|max:20',
             'alternate_phone' => 'nullable|string|max:20',
             'address' => 'nullable|string',

@@ -97,7 +97,7 @@
                             </x-badge>
                         </td>
                         <td>
-                            <span class="font-semibold text-gray-900">₹{{ number_format($jobCard->final_amount, 2) }}</span>
+                            <span class="font-semibold text-gray-900">Rs.{{ number_format($jobCard->final_amount, 2) }}</span>
                         </td>
                         <td>
                             <div class="flex items-center justify-end gap-2">

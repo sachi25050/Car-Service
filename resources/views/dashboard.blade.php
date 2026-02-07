@@ -27,7 +27,7 @@
         
         <x-stat-card 
             title="Today's Revenue" 
-            :value="'₹' . number_format($stats['today_revenue'], 2)" 
+            :value="'Rs.' . number_format($stats['today_revenue'], 2)" 
             icon="currency-rupee"
             color="primary" />
     </div>
@@ -62,7 +62,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-600">Month Revenue</p>
-                    <p class="text-2xl font-bold text-gray-900 mt-1">₹{{ number_format($stats['month_revenue'], 2) }}</p>
+                    <p class="text-2xl font-bold text-gray-900 mt-1">Rs.{{ number_format($stats['month_revenue'], 2) }}</p>
                 </div>
                 <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center">
                     <i class="bi bi-graph-up-arrow text-emerald-600 text-xl"></i>
@@ -102,7 +102,7 @@
                                         {{ $appointment->customer->full_name }}
                                     </p>
                                     <p class="text-sm text-gray-500 mt-0.5">
-                                        {{ $appointment->appointment_date->format('M d, Y') }} at {{ $appointment->appointment_time }}
+                                        {{ $appointment->appointment_date->format('d/m/Y') }} at {{ \Carbon\Carbon::createFromFormat('H:i', is_string($appointment->appointment_time) ? substr($appointment->appointment_time, 0, 5) : $appointment->appointment_time)->format('h:i A') }}
                                     </p>
                                     <p class="text-xs text-gray-400 mt-1">
                                         {{ $appointment->service->name ?? $appointment->package->name ?? 'N/A' }}
@@ -165,7 +165,7 @@
                             </div>
                         </div>
                         <div class="ml-4 text-right">
-                            <p class="text-sm font-semibold text-gray-900">₹{{ number_format($jobCard->final_amount, 2) }}</p>
+                            <p class="text-sm font-semibold text-gray-900">Rs.{{ number_format($jobCard->final_amount, 2) }}</p>
                             <x-badge :variant="$jobCard->status === 'completed' ? 'success' : ($jobCard->status === 'in_progress' ? 'info' : 'warning')" class="mt-1">
                                 {{ ucfirst(str_replace('_', ' ', $jobCard->status)) }}
                             </x-badge>

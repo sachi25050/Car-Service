@@ -53,7 +53,7 @@
                     </div>
                     <div class="col-md-6">
                         <strong>Created At:</strong><br>
-                        {{ $user->created_at->format('M d, Y h:i A') }}
+                        {{ $user->created_at->format('d/m/Y h:i A') }}
                     </div>
                 </div>
             </div>
@@ -69,7 +69,7 @@
                 <p><strong>Designation:</strong> {{ $user->staff->designation }}</p>
                 <p><strong>Department:</strong> {{ $user->staff->department ?? 'N/A' }}</p>
                 @if($user->staff->hire_date)
-                <p><strong>Hire Date:</strong> {{ $user->staff->hire_date->format('M d, Y') }}</p>
+                <p><strong>Hire Date:</strong> {{ $user->staff->hire_date->format('d/m/Y') }}</p>
                 @endif
             </div>
         </div>

@@ -197,7 +197,7 @@
 
         <!-- Main Content Area -->
         <main class="@auth py-6 @else min-h-screen @endauth">
-            <div class="@auth mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl @else @endauth">
+            <div class="@auth mx-auto px-4 sm:px-6 lg:px-12 {{ request()->routeIs('appointments.index') ? 'max-w-full' : 'max-w-7xl' }} @else @endauth">
                 <!-- Flash Messages -->
                 @if(session('success'))
                 <div x-data="{ show: true }" 

@@ -51,7 +51,7 @@
                     @if($customer->date_of_birth)
                     <div>
                         <dt class="text-sm font-medium text-gray-500">Date of Birth</dt>
-                        <dd class="mt-1 text-sm text-gray-900">{{ $customer->date_of_birth->format('M d, Y') }}</dd>
+                        <dd class="mt-1 text-sm text-gray-900">{{ $customer->date_of_birth->format('d/m/Y') }}</dd>
                     </div>
                     @endif
                     @if($customer->gender)

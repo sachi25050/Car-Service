@@ -109,6 +109,7 @@
                                name="date_of_birth" 
                                value="{{ old('date_of_birth') }}"
                                class="input-modern">
+                        <p class="mt-1 text-xs text-gray-500">System uses dd/mm/yyyy format</p>
                     </div>
                 </div>
             </div>

@@ -1,145 +1,239 @@
 @extends('layouts.app')
 
 @section('title', 'Add Vehicle')
+@section('page-title', 'Add Vehicle')
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1><i class="bi bi-car-front"></i> Add Vehicle</h1>
-    <a href="{{ route('vehicles.index') }}" class="btn btn-secondary">Back</a>
-</div>
+<div class="max-w-5xl mx-auto space-y-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Add Vehicle</h1>
+            <p class="mt-1 text-sm text-gray-500">Create a new vehicle profile</p>
+        </div>
+        <a href="{{ route('vehicles.index') }}" class="btn-secondary-modern">
+            <i class="bi bi-arrow-left"></i>
+            Back
+        </a>
+    </div>
 
-<div class="card">
-    <div class="card-body">
-        <form action="{{ route('vehicles.store') }}" method="POST">
+    <!-- Form Card -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <form action="{{ route('vehicles.store') }}" method="POST" class="space-y-6">
             @csrf
 
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="customer_id" class="form-label">Customer <span class="text-danger">*</span></label>
-                    <select class="form-select @error('customer_id') is-invalid @enderror" id="customer_id" name="customer_id" required>
-                        <option value="">Select Customer</option>
-                        @foreach($customers as $customer)
-                        <option value="{{ $customer->id }}" {{ old('customer_id') == $customer->id ? 'selected' : '' }}>
-                            {{ $customer->full_name }} - {{ $customer->phone }}
-                        </option>
-                        @endforeach
-                    </select>
-                    @error('customer_id')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+            <!-- Customer & Registration -->
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Basic Information</h3>
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div>
+                        <label for="customer_id" class="block text-sm font-medium text-gray-700 mb-1">
+                            Customer <span class="text-red-500">*</span>
+                        </label>
+                        <select id="customer_id" 
+                                name="customer_id" 
+                                required
+                                class="input-modern @error('customer_id') border-red-300 @enderror">
+                            <option value="">Select Customer</option>
+                            @foreach($customers as $customer)
+                            <option value="{{ $customer->id }}" {{ old('customer_id') == $customer->id ? 'selected' : '' }}>
+                                {{ $customer->full_name }} - {{ $customer->phone }}
+                            </option>
+                            @endforeach
+                        </select>
+                        @error('customer_id')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                <div class="col-md-6 mb-3">
-                    <label for="registration_number" class="form-label">Registration Number <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control @error('registration_number') is-invalid @enderror" 
-                           id="registration_number" name="registration_number" value="{{ old('registration_number') }}" required>
-                    @error('registration_number')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label for="make" class="form-label">Make <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control @error('make') is-invalid @enderror" 
-                           id="make" name="make" value="{{ old('make') }}" required>
-                    @error('make')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label for="model" class="form-label">Model <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control @error('model') is-invalid @enderror" 
-                           id="model" name="model" value="{{ old('model') }}" required>
-                    @error('model')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label for="year" class="form-label">Year</label>
-                    <input type="number" class="form-control @error('year') is-invalid @enderror" 
-                           id="year" name="year" value="{{ old('year') }}" min="1900" max="{{ date('Y') + 1 }}">
-                    @error('year')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+                    <div>
+                        <label for="registration_number" class="block text-sm font-medium text-gray-700 mb-1">
+                            Registration Number <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" 
+                               id="registration_number" 
+                               name="registration_number" 
+                               value="{{ old('registration_number') }}"
+                               required
+                               class="input-modern @error('registration_number') border-red-300 @enderror">
+                        @error('registration_number')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label for="color" class="form-label">Color</label>
-                    <input type="text" class="form-control" id="color" name="color" value="{{ old('color') }}">
-                </div>
+            <!-- Make, Model, Year -->
+            <div class="border-t border-gray-200 pt-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Vehicle Details</h3>
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+                    <div>
+                        <label for="make" class="block text-sm font-medium text-gray-700 mb-1">
+                            Make <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" 
+                               id="make" 
+                               name="make" 
+                               value="{{ old('make') }}"
+                               required
+                               class="input-modern @error('make') border-red-300 @enderror">
+                        @error('make')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                <div class="col-md-4 mb-3">
-                    <label for="vehicle_type" class="form-label">Vehicle Type <span class="text-danger">*</span></label>
-                    <select class="form-select @error('vehicle_type') is-invalid @enderror" id="vehicle_type" name="vehicle_type" required>
-                        <option value="sedan" {{ old('vehicle_type', 'sedan') === 'sedan' ? 'selected' : '' }}>Sedan</option>
-                        <option value="suv" {{ old('vehicle_type') === 'suv' ? 'selected' : '' }}>SUV</option>
-                        <option value="hatchback" {{ old('vehicle_type') === 'hatchback' ? 'selected' : '' }}>Hatchback</option>
-                        <option value="coupe" {{ old('vehicle_type') === 'coupe' ? 'selected' : '' }}>Coupe</option>
-                        <option value="convertible" {{ old('vehicle_type') === 'convertible' ? 'selected' : '' }}>Convertible</option>
-                        <option value="truck" {{ old('vehicle_type') === 'truck' ? 'selected' : '' }}>Truck</option>
-                        <option value="van" {{ old('vehicle_type') === 'van' ? 'selected' : '' }}>Van</option>
-                        <option value="motorcycle" {{ old('vehicle_type') === 'motorcycle' ? 'selected' : '' }}>Motorcycle</option>
-                        <option value="other" {{ old('vehicle_type') === 'other' ? 'selected' : '' }}>Other</option>
-                    </select>
-                    @error('vehicle_type')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                    <div>
+                        <label for="model" class="block text-sm font-medium text-gray-700 mb-1">
+                            Model <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" 
+                               id="model" 
+                               name="model" 
+                               value="{{ old('model') }}"
+                               required
+                               class="input-modern @error('model') border-red-300 @enderror">
+                        @error('model')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                <div class="col-md-4 mb-3">
-                    <label for="fuel_type" class="form-label">Fuel Type <span class="text-danger">*</span></label>
-                    <select class="form-select @error('fuel_type') is-invalid @enderror" id="fuel_type" name="fuel_type" required>
-                        <option value="petrol" {{ old('fuel_type', 'petrol') === 'petrol' ? 'selected' : '' }}>Petrol</option>
-                        <option value="diesel" {{ old('fuel_type') === 'diesel' ? 'selected' : '' }}>Diesel</option>
-                        <option value="electric" {{ old('fuel_type') === 'electric' ? 'selected' : '' }}>Electric</option>
-                        <option value="hybrid" {{ old('fuel_type') === 'hybrid' ? 'selected' : '' }}>Hybrid</option>
-                        <option value="cng" {{ old('fuel_type') === 'cng' ? 'selected' : '' }}>CNG</option>
-                        <option value="lpg" {{ old('fuel_type') === 'lpg' ? 'selected' : '' }}>LPG</option>
-                    </select>
-                    @error('fuel_type')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label for="mileage" class="form-label">Mileage</label>
-                    <input type="number" class="form-control" id="mileage" name="mileage" value="{{ old('mileage') }}" min="0">
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label for="vin_number" class="form-label">VIN Number</label>
-                    <input type="text" class="form-control" id="vin_number" name="vin_number" value="{{ old('vin_number') }}">
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label for="insurance_number" class="form-label">Insurance Number</label>
-                    <input type="text" class="form-control" id="insurance_number" name="insurance_number" value="{{ old('insurance_number') }}">
+                    <div>
+                        <label for="year" class="block text-sm font-medium text-gray-700 mb-1">Year</label>
+                        <input type="number" 
+                               id="year" 
+                               name="year" 
+                               value="{{ old('year') }}"
+                               min="1900" 
+                               max="{{ date('Y') + 1 }}"
+                               class="input-modern @error('year') border-red-300 @enderror">
+                        @error('year')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="insurance_expiry" class="form-label">Insurance Expiry</label>
-                    <input type="date" class="form-control" id="insurance_expiry" name="insurance_expiry" value="{{ old('insurance_expiry') }}">
+            <!-- Color, Type, Fuel -->
+            <div class="border-t border-gray-200 pt-6">
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+                    <div>
+                        <label for="color" class="block text-sm font-medium text-gray-700 mb-1">Color</label>
+                        <input type="text" 
+                               id="color" 
+                               name="color" 
+                               value="{{ old('color') }}"
+                               class="input-modern">
+                    </div>
+
+                    <div>
+                        <label for="vehicle_type" class="block text-sm font-medium text-gray-700 mb-1">
+                            Vehicle Type <span class="text-red-500">*</span>
+                        </label>
+                        <select id="vehicle_type" 
+                                name="vehicle_type" 
+                                required
+                                class="input-modern @error('vehicle_type') border-red-300 @enderror">
+                            <option value="sedan" {{ old('vehicle_type', 'sedan') === 'sedan' ? 'selected' : '' }}>Sedan</option>
+                            <option value="suv" {{ old('vehicle_type') === 'suv' ? 'selected' : '' }}>SUV</option>
+                            <option value="hatchback" {{ old('vehicle_type') === 'hatchback' ? 'selected' : '' }}>Hatchback</option>
+                            <option value="coupe" {{ old('vehicle_type') === 'coupe' ? 'selected' : '' }}>Coupe</option>
+                            <option value="convertible" {{ old('vehicle_type') === 'convertible' ? 'selected' : '' }}>Convertible</option>
+                            <option value="truck" {{ old('vehicle_type') === 'truck' ? 'selected' : '' }}>Truck</option>
+                            <option value="van" {{ old('vehicle_type') === 'van' ? 'selected' : '' }}>Van</option>
+                            <option value="motorcycle" {{ old('vehicle_type') === 'motorcycle' ? 'selected' : '' }}>Motorcycle</option>
+                            <option value="other" {{ old('vehicle_type') === 'other' ? 'selected' : '' }}>Other</option>
+                        </select>
+                        @error('vehicle_type')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="fuel_type" class="block text-sm font-medium text-gray-700 mb-1">
+                            Fuel Type <span class="text-red-500">*</span>
+                        </label>
+                        <select id="fuel_type" 
+                                name="fuel_type" 
+                                required
+                                class="input-modern @error('fuel_type') border-red-300 @enderror">
+                            <option value="petrol" {{ old('fuel_type', 'petrol') === 'petrol' ? 'selected' : '' }}>Petrol</option>
+                            <option value="diesel" {{ old('fuel_type') === 'diesel' ? 'selected' : '' }}>Diesel</option>
+                            <option value="electric" {{ old('fuel_type') === 'electric' ? 'selected' : '' }}>Electric</option>
+                            <option value="hybrid" {{ old('fuel_type') === 'hybrid' ? 'selected' : '' }}>Hybrid</option>
+                            <option value="cng" {{ old('fuel_type') === 'cng' ? 'selected' : '' }}>CNG</option>
+                            <option value="lpg" {{ old('fuel_type') === 'lpg' ? 'selected' : '' }}>LPG</option>
+                        </select>
+                        @error('fuel_type')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
             </div>
 
-            <div class="mb-3">
-                <label for="notes" class="form-label">Notes</label>
-                <textarea class="form-control" id="notes" name="notes" rows="3">{{ old('notes') }}</textarea>
+            <!-- Mileage, VIN, Insurance -->
+            <div class="border-t border-gray-200 pt-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Additional Information</h3>
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+                    <div>
+                        <label for="mileage" class="block text-sm font-medium text-gray-700 mb-1">Mileage</label>
+                        <input type="number" 
+                               id="mileage" 
+                               name="mileage" 
+                               value="{{ old('mileage') }}"
+                               min="0"
+                               class="input-modern">
+                    </div>
+
+                    <div>
+                        <label for="vin_number" class="block text-sm font-medium text-gray-700 mb-1">VIN Number</label>
+                        <input type="text" 
+                               id="vin_number" 
+                               name="vin_number" 
+                               value="{{ old('vin_number') }}"
+                               class="input-modern">
+                    </div>
+
+                    <div>
+                        <label for="insurance_number" class="block text-sm font-medium text-gray-700 mb-1">Insurance Number</label>
+                        <input type="text" 
+                               id="insurance_number" 
+                               name="insurance_number" 
+                               value="{{ old('insurance_number') }}"
+                               class="input-modern">
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <label for="insurance_expiry" class="block text-sm font-medium text-gray-700 mb-1">Insurance Expiry</label>
+                    <input type="date" 
+                           id="insurance_expiry" 
+                           name="insurance_expiry" 
+                           value="{{ old('insurance_expiry') }}"
+                           class="input-modern w-full sm:w-auto">
+                    <p class="mt-1 text-xs text-gray-500">System uses dd/mm/yyyy format</p>
+                </div>
             </div>
 
-            <div class="d-flex justify-content-end gap-2">
-                <a href="{{ route('vehicles.index') }}" class="btn btn-secondary">Cancel</a>
-                <button type="submit" class="btn btn-primary">Create Vehicle</button>
+            <!-- Notes -->
+            <div class="border-t border-gray-200 pt-6">
+                <div>
+                    <label for="notes" class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                    <textarea id="notes" 
+                              name="notes" 
+                              rows="3"
+                              class="input-modern">{{ old('notes') }}</textarea>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="flex items-center justify-end gap-3 pt-6 border-t border-gray-200">
+                <a href="{{ route('vehicles.index') }}" class="btn-secondary-modern">
+                    Cancel
+                </a>
+                <button type="submit" class="btn-primary-modern">
+                    <i class="bi bi-check-circle"></i>
+                    Create Vehicle
+                </button>
             </div>
         </form>
     </div>

@@ -11,6 +11,31 @@ class StoreAppointmentRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        // Normalize time to H:i (strip seconds / convert 12-hour inputs)
+        $time = $this->input('appointment_time');
+        if (is_string($time) && $time !== '') {
+            $time = trim($time);
+
+            // "HH:MM:SS" -> "HH:MM"
+            if (preg_match('/^\d{2}:\d{2}:\d{2}$/', $time)) {
+                $time = substr($time, 0, 5);
+            }
+
+            // "hh:mm AM/PM" -> "HH:MM"
+            if (preg_match('/^\d{1,2}:\d{2}\s?(AM|PM)$/i', $time)) {
+                try {
+                    $time = \Carbon\Carbon::createFromFormat('g:i A', strtoupper(str_replace('  ', ' ', $time)))->format('H:i');
+                } catch (\Exception $e) {
+                    // leave as-is; validation will handle error
+                }
+            }
+
+            $this->merge(['appointment_time' => $time]);
+        }
+    }
+
     public function rules(): array
     {
         return [

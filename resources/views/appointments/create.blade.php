@@ -1,146 +1,221 @@
 @extends('layouts.app')
 
 @section('title', 'Create Appointment')
+@section('page-title', 'Create Appointment')
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1><i class="bi bi-calendar-plus"></i> Create Appointment</h1>
-    <a href="{{ route('appointments.index') }}" class="btn btn-secondary">Back</a>
-</div>
+<div class="max-w-5xl mx-auto space-y-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Create Appointment</h1>
+            <p class="mt-1 text-sm text-gray-500">Schedule a new appointment</p>
+        </div>
+        <a href="{{ route('appointments.index') }}" class="btn-secondary-modern">
+            <i class="bi bi-arrow-left"></i>
+            Back
+        </a>
+    </div>
 
-<div class="card">
-    <div class="card-body">
-        <form action="{{ route('appointments.store') }}" method="POST">
+    <!-- Form Card -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <form action="{{ route('appointments.store') }}" method="POST" class="space-y-6">
             @csrf
 
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="customer_id" class="form-label">Customer <span class="text-danger">*</span></label>
-                    <select class="form-select @error('customer_id') is-invalid @enderror" id="customer_id" name="customer_id" required>
-                        <option value="">Select Customer</option>
-                        @foreach($customers as $customer)
-                        <option value="{{ $customer->id }}" {{ old('customer_id') == $customer->id ? 'selected' : '' }}>
-                            {{ $customer->full_name }} - {{ $customer->phone }}
-                        </option>
-                        @endforeach
-                    </select>
-                    @error('customer_id')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
+            <!-- Customer & Vehicle -->
+            <div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Customer & Vehicle</h3>
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div>
+                        <label for="customer_id" class="block text-sm font-medium text-gray-700 mb-1">
+                            Customer <span class="text-red-500">*</span>
+                        </label>
+                        <select id="customer_id" 
+                                name="customer_id" 
+                                required
+                                class="input-modern @error('customer_id') border-red-300 @enderror">
+                            <option value="">Select Customer</option>
+                            @foreach($customers as $customer)
+                            <option value="{{ $customer->id }}" {{ old('customer_id') == $customer->id ? 'selected' : '' }}>
+                                {{ $customer->full_name }} - {{ $customer->phone }}
+                            </option>
+                            @endforeach
+                        </select>
+                        @error('customer_id')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="vehicle_id" class="block text-sm font-medium text-gray-700 mb-1">
+                            Vehicle <span class="text-red-500">*</span>
+                        </label>
+                        <select id="vehicle_id" 
+                                name="vehicle_id" 
+                                required
+                                class="input-modern @error('vehicle_id') border-red-300 @enderror">
+                            <option value="">Select Vehicle</option>
+                        </select>
+                        @error('vehicle_id')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service & Package -->
+            <div class="border-t border-gray-200 pt-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Service Information</h3>
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div>
+                        <label for="service_id" class="block text-sm font-medium text-gray-700 mb-1">Service</label>
+                        <select id="service_id" 
+                                name="service_id"
+                                class="input-modern @error('service_id') border-red-300 @enderror">
+                            <option value="">Select Service</option>
+                            @foreach($services as $service)
+                            <option value="{{ $service->id }}" data-duration="{{ $service->duration_minutes }}" {{ old('service_id') == $service->id ? 'selected' : '' }}>
+                                {{ $service->name }} ({{ $service->duration_minutes }} min) - Rs.{{ number_format($service->base_price, 2) }}
+                            </option>
+                            @endforeach
+                        </select>
+                        @error('service_id')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="package_id" class="block text-sm font-medium text-gray-700 mb-1">Service Package</label>
+                        <select id="package_id" 
+                                name="package_id"
+                                class="input-modern @error('package_id') border-red-300 @enderror">
+                            <option value="">Select Package</option>
+                            @foreach($packages as $package)
+                            <option value="{{ $package->id }}" data-duration="{{ $package->duration_minutes }}" {{ old('package_id') == $package->id ? 'selected' : '' }}>
+                                {{ $package->name }} ({{ $package->duration_minutes }} min) - Rs.{{ number_format($package->price, 2) }}
+                            </option>
+                            @endforeach
+                        </select>
+                        @error('package_id')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+
+            <!-- Date & Time -->
+            <div class="border-t border-gray-200 pt-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Appointment Schedule</h3>
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div>
+                        <label for="appointment_date" class="block text-sm font-medium text-gray-700 mb-1">
+                            Appointment Date <span class="text-red-500">*</span>
+                        </label>
+                        <input type="date" 
+                               id="appointment_date" 
+                               name="appointment_date" 
+                               value="{{ old('appointment_date', date('Y-m-d')) }}" 
+                               min="{{ date('Y-m-d') }}" 
+                               required
+                               class="input-modern @error('appointment_date') border-red-300 @enderror">
+                        <p class="mt-1 text-xs text-gray-500">System uses dd/mm/yyyy format</p>
+                        @error('appointment_date')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="appointment_time" class="block text-sm font-medium text-gray-700 mb-1">
+                            Appointment Time <span class="text-red-500">*</span>
+                        </label>
+                        <input type="time" 
+                               id="appointment_time" 
+                               name="appointment_time" 
+                               value="{{ old('appointment_time') }}" 
+                               required
+                               class="input-modern @error('appointment_time') border-red-300 @enderror">
+                        @error('appointment_time')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+
+            <!-- Duration & Staff -->
+            <div class="border-t border-gray-200 pt-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Additional Details</h3>
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div>
+                        <label for="estimated_duration" class="block text-sm font-medium text-gray-700 mb-1">Estimated Duration (minutes)</label>
+                        <input type="number" 
+                               id="estimated_duration" 
+                               name="estimated_duration" 
+                               value="{{ old('estimated_duration', 60) }}" 
+                               min="15" 
+                               step="15"
+                               class="input-modern @error('estimated_duration') border-red-300 @enderror">
+                        @error('estimated_duration')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="assigned_staff_id" class="block text-sm font-medium text-gray-700 mb-1">Assign Staff</label>
+                        <select id="assigned_staff_id" 
+                                name="assigned_staff_id"
+                                class="input-modern @error('assigned_staff_id') border-red-300 @enderror">
+                            <option value="">No Assignment</option>
+                            @foreach($staff as $staffMember)
+                            <option value="{{ $staffMember->id }}" {{ old('assigned_staff_id') == $staffMember->id ? 'selected' : '' }}>
+                                {{ $staffMember->user->name }} - {{ $staffMember->designation }}
+                            </option>
+                            @endforeach
+                        </select>
+                        @error('assigned_staff_id')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status & Notes -->
+            <div class="border-t border-gray-200 pt-6">
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div>
+                        <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                        <select id="status" 
+                                name="status"
+                                class="input-modern @error('status') border-red-300 @enderror">
+                            <option value="pending" {{ old('status', 'pending') === 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="confirmed" {{ old('status') === 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                        </select>
+                        @error('status')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
 
-                <div class="col-md-6 mb-3">
-                    <label for="vehicle_id" class="form-label">Vehicle <span class="text-danger">*</span></label>
-                    <select class="form-select @error('vehicle_id') is-invalid @enderror" id="vehicle_id" name="vehicle_id" required>
-                        <option value="">Select Vehicle</option>
-                    </select>
-                    @error('vehicle_id')
-                    <div class="invalid-feedback">{{ $message }}</div>
+                <div class="mt-6">
+                    <label for="notes" class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                    <textarea id="notes" 
+                              name="notes" 
+                              rows="3"
+                              class="input-modern @error('notes') border-red-300 @enderror">{{ old('notes') }}</textarea>
+                    @error('notes')
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="service_id" class="form-label">Service</label>
-                    <select class="form-select @error('service_id') is-invalid @enderror" id="service_id" name="service_id">
-                        <option value="">Select Service</option>
-                        @foreach($services as $service)
-                        <option value="{{ $service->id }}" data-duration="{{ $service->duration_minutes }}" {{ old('service_id') == $service->id ? 'selected' : '' }}>
-                            {{ $service->name }} ({{ $service->duration_minutes }} min) - ₹{{ number_format($service->base_price, 2) }}
-                        </option>
-                        @endforeach
-                    </select>
-                    @error('service_id')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label for="package_id" class="form-label">Service Package</label>
-                    <select class="form-select @error('package_id') is-invalid @enderror" id="package_id" name="package_id">
-                        <option value="">Select Package</option>
-                        @foreach($packages as $package)
-                        <option value="{{ $package->id }}" data-duration="{{ $package->duration_minutes }}" {{ old('package_id') == $package->id ? 'selected' : '' }}>
-                            {{ $package->name }} ({{ $package->duration_minutes }} min) - ₹{{ number_format($package->price, 2) }}
-                        </option>
-                        @endforeach
-                    </select>
-                    @error('package_id')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="appointment_date" class="form-label">Appointment Date <span class="text-danger">*</span></label>
-                    <input type="date" class="form-control @error('appointment_date') is-invalid @enderror" 
-                           id="appointment_date" name="appointment_date" value="{{ old('appointment_date', date('Y-m-d')) }}" 
-                           min="{{ date('Y-m-d') }}" required>
-                    @error('appointment_date')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label for="appointment_time" class="form-label">Appointment Time <span class="text-danger">*</span></label>
-                    <input type="time" class="form-control @error('appointment_time') is-invalid @enderror" 
-                           id="appointment_time" name="appointment_time" value="{{ old('appointment_time') }}" required>
-                    @error('appointment_time')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="estimated_duration" class="form-label">Estimated Duration (minutes)</label>
-                    <input type="number" class="form-control @error('estimated_duration') is-invalid @enderror" 
-                           id="estimated_duration" name="estimated_duration" value="{{ old('estimated_duration', 60) }}" min="15" step="15">
-                    @error('estimated_duration')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label for="assigned_staff_id" class="form-label">Assign Staff</label>
-                    <select class="form-select @error('assigned_staff_id') is-invalid @enderror" id="assigned_staff_id" name="assigned_staff_id">
-                        <option value="">No Assignment</option>
-                        @foreach($staff as $staffMember)
-                        <option value="{{ $staffMember->id }}" {{ old('assigned_staff_id') == $staffMember->id ? 'selected' : '' }}>
-                            {{ $staffMember->user->name }} - {{ $staffMember->designation }}
-                        </option>
-                        @endforeach
-                    </select>
-                    @error('assigned_staff_id')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label for="status" class="form-label">Status</label>
-                <select class="form-select @error('status') is-invalid @enderror" id="status" name="status">
-                    <option value="pending" {{ old('status', 'pending') === 'pending' ? 'selected' : '' }}>Pending</option>
-                    <option value="confirmed" {{ old('status') === 'confirmed' ? 'selected' : '' }}>Confirmed</option>
-                </select>
-                @error('status')
-                <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="mb-3">
-                <label for="notes" class="form-label">Notes</label>
-                <textarea class="form-control @error('notes') is-invalid @enderror" id="notes" name="notes" rows="3">{{ old('notes') }}</textarea>
-                @error('notes')
-                <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
-
-            <div class="d-flex justify-content-end gap-2">
-                <a href="{{ route('appointments.index') }}" class="btn btn-secondary">Cancel</a>
-                <button type="submit" class="btn btn-primary">Create Appointment</button>
+            <!-- Form Actions -->
+            <div class="flex items-center justify-end gap-3 pt-6 border-t border-gray-200">
+                <a href="{{ route('appointments.index') }}" class="btn-secondary-modern">
+                    Cancel
+                </a>
+                <button type="submit" class="btn-primary-modern">
+                    <i class="bi bi-check-circle"></i>
+                    Create Appointment
+                </button>
             </div>
         </form>
     </div>

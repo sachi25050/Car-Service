@@ -136,7 +136,9 @@ The system uses Laravel's built-in authentication with role-based access control
 ## 📝 Key Features Implementation
 
 ### Appointment Booking
-- Conflict detection for time slots
+- **Conflict detection for time slots** - See [Appointment Conflict Logic Documentation](docs/APPOINTMENT_CONFLICT_LOGIC.md) for detailed rules
+  - 12-minute buffer between appointment start times
+  - Maximum 5 concurrent appointments
 - Status management (pending, confirmed, in_progress, completed, cancelled)
 - Staff assignment
 

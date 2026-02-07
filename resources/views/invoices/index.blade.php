@@ -76,17 +76,17 @@
                             <p class="text-xs text-gray-500">{{ $invoice->customer->phone }}</p>
                         </td>
                         <td>
-                            <span class="text-gray-900">{{ $invoice->invoice_date->format('M d, Y') }}</span>
+                            <span class="text-gray-900">{{ $invoice->invoice_date->format('d/m/Y') }}</span>
                         </td>
                         <td>
-                            <span class="font-semibold text-gray-900">₹{{ number_format($invoice->total_amount, 2) }}</span>
+                            <span class="font-semibold text-gray-900">Rs.{{ number_format($invoice->total_amount, 2) }}</span>
                         </td>
                         <td>
-                            <span class="text-gray-900">₹{{ number_format($invoice->paid_amount, 2) }}</span>
+                            <span class="text-gray-900">Rs.{{ number_format($invoice->paid_amount, 2) }}</span>
                         </td>
                         <td>
                             <span class="font-medium {{ $invoice->balance_amount > 0 ? 'text-red-600' : 'text-green-600' }}">
-                                ₹{{ number_format($invoice->balance_amount, 2) }}
+                                Rs.{{ number_format($invoice->balance_amount, 2) }}
                             </span>
                         </td>
                         <td>

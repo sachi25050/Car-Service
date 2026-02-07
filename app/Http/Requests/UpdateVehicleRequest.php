@@ -14,9 +14,11 @@ class UpdateVehicleRequest extends FormRequest
 
     public function rules(): array
     {
+        $vehicle = $this->route('vehicle');
+        
         return [
             'customer_id' => 'required|exists:customers,id',
-            'registration_number' => ['required', 'string', 'max:50', Rule::unique('vehicles', 'registration_number')->ignore($this->vehicle)],
+            'registration_number' => ['required', 'string', 'max:50', Rule::unique('vehicles', 'registration_number')->ignore($vehicle)],
             'make' => 'required|string|max:100',
             'model' => 'required|string|max:100',
             'year' => 'nullable|integer|min:1900|max:' . (date('Y') + 1),
